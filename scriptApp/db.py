@@ -13,6 +13,8 @@ class Provider(Base):
     __tablename__ = "provider"
     id = Column("id", Integer, primary_key=True)
     code = Column("code", Integer, nullable=False)
+    name = Column("name", String(100), nullable=False)
+    cuit = Column("cuit", BigInteger, nullable=False)
     email = Column("email", String(50), nullable=False)
     cc = Column("cc", String(50), nullable=False)
     payment_orders = relationship("PayOrder", backref="provider")

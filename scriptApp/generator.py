@@ -15,7 +15,8 @@ def detail(datadir: str, date: str, provider: Provider) -> str:
 
 
 def attachments(datadir: str, date: str, provider: Provider) -> [str]:
-    attachments_path_list = [detail(datadir, date, provider)]
+    #attachments_path_list = [detail(datadir, date, provider)]
+    attachments_path_list = []
     for file in listdir(datadir):
         payment_orders = provider.payment_orders
         for pay_order in payment_orders:
@@ -24,18 +25,17 @@ def attachments(datadir: str, date: str, provider: Provider) -> [str]:
     return attachments_path_list
 
 
-def subject(date: str) -> str:
+def subject(date: str, cuit: str, name: str) -> str:
     return (
-        f'Informe de pagos - Transferencias {date} - OSSACRA'
+        f'Informe de pagos - {cuit} - {name} - Transferencias {date} - OSSACRA'
     )
 
 
-def message(date: str, cc: str) -> str:
+def message(date: str) -> str:
     return (
         f'''
             <h2>Estimado/a:</h2>
             <h3>Se adjuntan las ordenes de pago, comprobantes de transferencias y detalle de los pagos realizados el dia {date} .</h3>
-            <h4>Por cualquier consulta o reclamo puede enviar un correo a {cc}</h4>
             <p>
                 <table align="center" width="75%">
                     <tr>

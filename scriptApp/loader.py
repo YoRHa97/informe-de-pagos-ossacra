@@ -1,4 +1,4 @@
-from scriptApp.utils import extract_substring
+from scriptApp.utils import log, extract_substring
 from scriptApp.db import engine, session, Transfer
 from PyPDF2 import PdfFileReader
 from PyEzFile import File
@@ -10,7 +10,7 @@ from time import sleep
 
 def load_data(data_path):
 
-    print(f"{Fore.CYAN}Cargando datos...{Fore.RESET}\n")
+    log(f"{Fore.CYAN}Cargando datos...{Fore.RESET}\n")
 
     sleep(1)
 
@@ -38,15 +38,15 @@ def load_data(data_path):
             session.add(record)
         session.commit()
 
-    print(f"{Fore.YELLOW}Detalle_de_Transferencias.pdf{Fore.RESET} --> {Fore.GREEN}OK{Fore.RESET}")
+    log(f"{Fore.YELLOW}Detalle_de_Transferencias.pdf{Fore.RESET} --> {Fore.GREEN}OK{Fore.RESET}")
 
     sleep(1)
 
     payment_details_file = File(join(data_path, 'Detalle_de_Pagos.xlsx'))
     data = read_excel(payment_details_file.path)
 
-    provider_df = DataFrame(data, columns=['CODIGO BENEFICIARIO', 'EMAIL - PRESTADOR', 'EMAIL - RESPONSABLE'])
-    provider_df.rename(columns={'CODIGO BENEFICIARIO': 'code', 'EMAIL - PRESTADOR': 'email', 'EMAIL - RESPONSABLE': 'cc'}, inplace=True)
+    provider_df = DataFrame(data, columns=['CODIGO BENEFICIARIO', "BENEFICIARIO", 'CUIT', 'EMAIL-PRESTADOR', 'EMAIL-RESPONSABLE'])
+    provider_df.rename(columns={'CODIGO BENEFICIARIO': 'code', 'BENEFICIARIO': 'name', 'CUIT': 'cuit', 'EMAIL-PRESTADOR': 'email', 'EMAIL-RESPONSABLE': 'cc'}, inplace=True)
     provider_df.drop_duplicates(inplace=True)
     provider_df.to_sql('provider', con=engine, if_exists="append", index=False)
 
@@ -54,6 +54,6 @@ def load_data(data_path):
     pay_order_df.rename(columns={'OP': 'number', 'FC': 'invoice', 'CODIGO BENEFICIARIO': 'provider_code'}, inplace=True)
     pay_order_df.to_sql('pay_order', con=engine, if_exists="append", index=False)
 
-    print(f"{Fore.YELLOW}Detalle_de_Pagos.xlsx{Fore.RESET} --> {Fore.GREEN}OK{Fore.RESET}")
+    log(f"{Fore.YELLOW}Detalle_de_Pagos.xlsx{Fore.RESET} --> {Fore.GREEN}OK{Fore.RESET}")
 
     sleep(1)

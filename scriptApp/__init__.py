@@ -1,7 +1,7 @@
 from scriptApp.db import Provider, PayOrder, Transfer
 from scriptApp.loader import load_data
 from scriptApp.sender import send_data
-from scriptApp.utils import askdirectory
+from scriptApp.utils import askdirectory, log
 from colorama import Fore
 from getpass import getpass
 from PyEzEmail import SmtpConfig
@@ -16,7 +16,7 @@ def mainscript():
 
     system("cls" or "clear")
 
-    print(f"Conectando...")
+    log(f"Conectando...")
 
     smtpcfg = SmtpConfig(
         username=username,
@@ -27,11 +27,11 @@ def mainscript():
 
     system("cls" or "clear")
 
-    print(f"{Fore.GREEN}Conexion establecida correctamente!{Fore.RESET}\n")
+    log(f"{Fore.GREEN}Conexion establecida correctamente!{Fore.RESET}\n")
 
     sleep(1)
 
-    print(f"{Fore.CYAN}Seleccione la carpeta con los datos a procesar:{Fore.RESET}\n")
+    log(f"{Fore.CYAN}Seleccione la carpeta con los datos a procesar:{Fore.RESET}\n")
 
     sleep(1)
 

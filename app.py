@@ -3,6 +3,7 @@ from colorama import Fore
 from signal import signal, SIGINT
 from traceback import print_exc
 from scriptApp import mainscript
+from scriptApp.utils import log
 
 
 def exit_handler(signum, frame):
@@ -17,7 +18,7 @@ if __name__ == '__main__':
     try:
         mainscript()
     except Exception as Ex:
-        print(f'\n{Fore.LIGHTRED_EX}{Ex}{Fore.RESET}')
+        log(f'\n{Fore.LIGHTRED_EX}{Ex}{Fore.RESET}')
         with open('exception.txt', 'w+') as f:
             print_exc(file=f)
     input("\nPresione una tecla para finalizar . . .")
