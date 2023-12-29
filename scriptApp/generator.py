@@ -17,11 +17,16 @@ def detail(datadir: str, date: str, provider: Provider) -> str:
 def attachments(datadir: str, date: str, provider: Provider) -> [str]:
     #attachments_path_list = [detail(datadir, date, provider)]
     attachments_path_list = []
-    for file in listdir(datadir):
+    for file in listdir(join(datadir,'ordenes')):
         payment_orders = provider.payment_orders
         for pay_order in payment_orders:
-            if (str(pay_order.transfer.date) == date) and (str(pay_order.number) in file or str(pay_order.transfer.number) in file):
-                attachments_path_list.append(join(datadir, file))
+            if (str(pay_order.transfer.date) == date) and (str(pay_order.number) in file):
+                attachments_path_list.append(join(datadir,'ordenes', file))
+    for file in listdir(join(datadir,'comprobantes')):
+        payment_orders = provider.payment_orders
+        for pay_order in payment_orders:
+            if (str(pay_order.transfer.date) == date) and (str(pay_order.transfer.number) in file):
+                attachments_path_list.append(join(datadir,'comprobantes', file))
     return attachments_path_list
 
 

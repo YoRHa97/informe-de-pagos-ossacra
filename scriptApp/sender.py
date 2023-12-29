@@ -3,13 +3,12 @@ from scriptApp.generator import message, subject, attachments
 from scriptApp.utils import log
 from PyEzEmail import Email, MailData
 from pandas import read_sql_query
-from colorama import Fore
 from time import sleep
 
 
 def send_data(datadir, smtpcfg):
 
-    log(f"\n{Fore.CYAN}Iniciando envio de informes...{Fore.RESET}\n")
+    log(f"\nIniciando envio de informes...\n")
 
     providers = session.query(Provider).all()
 
@@ -34,7 +33,7 @@ def send_data(datadir, smtpcfg):
                 message=message(date),
                 attachments=attachments(datadir, date, provider))
 
-            log(f"{Fore.CYAN}Enviando:{Fore.RESET} Codigo: {Fore.LIGHTMAGENTA_EX}{provider.code}{Fore.RESET} - Mail: {Fore.LIGHTMAGENTA_EX}{provider.email}{Fore.RESET}")
+            log(f"Enviando: Prestador: {provider.name} - {provider.code} - Mails: {provider.email} - {provider.cc}")
 
             try:
                 Email(smtpcfg, data).send()
@@ -46,13 +45,13 @@ def send_data(datadir, smtpcfg):
 
             sleep(1)
             
-            if i == 200:
-                log("\n200 mails enviados, entrando en periodo de espera de 1 hora . . .\n")
+            if i == 400:
+                log("\n400 mails enviados, entrando en periodo de espera de 1 hora . . .\n")
                 sleep(3600)
                 i = 0
 
     sleep(1)
 
-    log(f"\n{Fore.GREEN}Envio finalizado.{Fore.RESET}")
+    log(f"\nEnvio finalizado")
 
     sleep(1)
