@@ -3,7 +3,6 @@ from pandas import read_sql_query
 from os import listdir
 from os.path import join
 
-
 def detail(datadir: str, date: str, provider: Provider) -> str:
     file_path = join(datadir, f'Detalle_de_Pagos_{date.replace("/", "-")}_{provider.code}.xlsx')
     transfers_df = read_sql_query(session.query(Transfer, PayOrder).join(PayOrder, Transfer.pay_order).filter(PayOrder.provider_code == provider.code).statement, session.bind)
@@ -13,9 +12,7 @@ def detail(datadir: str, date: str, provider: Provider) -> str:
     transfers_df.to_excel(file_path, index=False)
     return file_path
 
-
 def attachments(datadir: str, date: str, provider: Provider) -> [str]:
-    #attachments_path_list = [detail(datadir, date, provider)]
     attachments_path_list = []
     for file in listdir(join(datadir,'ordenes')):
         payment_orders = provider.payment_orders
@@ -29,12 +26,10 @@ def attachments(datadir: str, date: str, provider: Provider) -> [str]:
                 attachments_path_list.append(join(datadir,'comprobantes', file))
     return attachments_path_list
 
-
 def subject(date: str, cuit: str, name: str) -> str:
     return (
         f'Informe de pagos - {cuit} - {name} - Transferencias {date} - OSSACRA'
     )
-
 
 def message(date: str) -> str:
     return (

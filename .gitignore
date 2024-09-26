@@ -3,3 +3,5 @@
 __pycache__
 exception.txt
 log.txt
+credentials.json
+token.json
