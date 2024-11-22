@@ -14,7 +14,7 @@ from scriptApp.db import session, Provider, Transfer, PayOrder
 from scriptApp.generator import message, subject, attachments
 
 
-def gmail_send_message_with_attachment(index, creds, to, subject, message, attachments):
+def gmail_send_message_with_attachment(creds, to, subject, message, attachments):
     while True:
         try:
             service = build("gmail", "v1", credentials=creds)
@@ -32,7 +32,7 @@ def gmail_send_message_with_attachment(index, creds, to, subject, message, attac
             encoded_message = base64.urlsafe_b64encode(mime_message.as_bytes()).decode()
             create_message = {"raw": encoded_message}
             send_message  = service.users().messages().send(userId="me", body=create_message).execute()
-            print(f'Message Id: {index}_{send_message["id"]}')
+            print(f'Message Id: {send_message["id"]}')
             break
         except HttpError as error:
             print(f"An error occurred: {error}")
@@ -72,9 +72,8 @@ def send_data(datadir):
                 to = provider.email.split(';')
             if provider.cc:
                 to = to + provider.cc.split(';')
-            log(f"Enviando: {provider.code} - {provider.name} - {to}")
+            log(f"Enviando: {global_counter} - {provider.code} - {provider.name} - {to}")
             gmail_send_message_with_attachment(
-                index=global_counter,
                 creds=creds,
                 to=to,
                 subject=subject(date, provider.cuit, provider.name),
@@ -82,9 +81,9 @@ def send_data(datadir):
                 attachments=attachments(datadir, date, provider))
             counter += 1
             global_counter += 1
-            if counter == 500:
-                log('500 mails enviados, entrando en espera de 3600 segundos...')
-                time.sleep(3600)
+            if counter == 400:
+                log('400 mails enviados, entrando en espera de 4000 segundos...')
+                time.sleep(4000)
                 counter = 0
             time.sleep(1)
     time.sleep(1)
